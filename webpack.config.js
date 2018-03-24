@@ -1,7 +1,7 @@
 const path = require('path');
 const HTMLPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
-const ExtractPlugin = require('extract-text-webpack-plugin');
+const ExtractPlugin = require('extract-text-webpack-plugin'); //CSS单独打包
 
 const isDev = process.env.NODE_ENV === 'development';
 //__dirname:当前文件所在的目录 这里就是根目录
@@ -92,13 +92,13 @@ if (isDev) {
     // 生成坏境的配置
     config.entry = {   // 将所用到的类库单独打包
         app: path.join(__dirname, 'src/index.js'),
-        vendor: ['vue']
+        vendor: ['vue'] //['vue', 'axios','vue-router']
     };
     config.output.filename = '[name].[chunkhash:8].js';
     config.module.rules.push({
         test: /\.styl/,
-        use: ExtractPlugin.extract({
-            fallback: 'style-loader',
+        use: ExtractPlugin.extract({ //css单独打包
+            fallback: 'style-loader', //style-loader在生产环境下只是将CSS文件用JS形式插入到页面中
             use: [
                 'css-loader',
                 {
@@ -112,7 +112,7 @@ if (isDev) {
         })
     });
     config.plugins.push(
-        new ExtractPlugin('styles.[contentHash:8].css'),
+        new ExtractPlugin('styles.[contentHash:8].css')
 
         // // 将类库文件单独打包出来
         // new webpack.optimize.CommonsChunkPlugin({
